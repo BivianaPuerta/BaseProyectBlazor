@@ -1,0 +1,68 @@
+﻿@page "/"
+@inject ServicesSingleton singleton
+@inject IRepository repository 
+@using static BaseProyectBlazor.Client.Shared.MainLayout;
+
+
+<p style="color:@appState.Color; font-size:@appState.Size">Hola, @StringUtilities.Enmayuscular(nombre)</p>
+
+
+
+<div>
+    <h3>
+        <MovieList Movies="Movies" />
+    </h3>
+</div>
+
+<button @onclick="AddPelicula">Agregar Pelicula </button>
+
+<div class="col-sm-12 text-justify">
+    <select name="blockbustermovies">
+        <option value="animales_fantasticos.jpg">Animales fantasticos 3 </option>
+        <option value="castillovagabundo.jpg">El Castillo Vagabundo</option>
+        <option value="earwig_y_la hechicera.jpg">Earwig y la hechicera</option>
+    </select>
+</div>
+
+@code{
+    string nombre = "Eduar";
+    [CascadingParameter] private AppState appState { get; set; }
+
+    private List<Movie> Movies;
+
+    protected override void OnInitialized()
+    {
+
+        Movies = repository.GetMovies();
+    }
+
+
+    void AddPelicula()
+    {
+        Movies.Add(new Movie() { Title = "Nueva Pelicula", Premiere = DateTime.Today });
+    }
+
+
+    //public Movie SpiderMan { get { return GetMovie(); } }
+
+    //    private void ManejarClick()
+    //    {
+    //        Console.WriteLine("Me han clickeado (desde metodo)");
+    //    }
+    //}
+
+
+    private void ImageUrl()
+    {
+        var imagePath= "blockbustermovies";
+
+        if (imagePath != null)
+        {
+                <img src="/MoviesImages/" width="300"/>
+            }
+        else if (imagePath == null)
+            {
+                <img src="/MoviesImages/interrogacion.jpg" />
+            }
+    }
+}
